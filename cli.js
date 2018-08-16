@@ -29,6 +29,8 @@ var argv = require('optimist')
   .default('o', path.resolve(path.join('.', 'out')))
   .alias('m', 'meta')
   .describe('m', 'add metadata elements to .md files Eg -m template=reference. Multiple values can be added by repeating the flag Eg: -m template=reference -m hide-nav=true')
+  .alias('t', 'templates')
+  .describe('t', 'path to template directory')
   .alias('s', 'metaSchema')
   .describe('s', 'Custom meta schema path to validate schemas')
   .alias('x', 'schema-out')
@@ -60,6 +62,9 @@ var schemaDir = argv.x === '-' ? '' : argv.x ? path.resolve(argv.x) : outDir;
 var target = fs.statSync(schemaPath);
 const readme = argv.n !== true;
 const schemaExtension = argv.e || 'schema.json';
+
+require('./lib/options').set('templatePath', path.resolve(argv.t || './templates/md'));
+//console.log('templatePath %s', require('./lib/options').get('templatePath'));
 
 if (argv.s){
   ajv.addMetaSchema(require(path.resolve(argv.s)));
